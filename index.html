@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MathHaven - Tools & Puzzles</title>
+    <link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Open Sans', sans-serif; background-color: #f4f7f5; color: #333; line-height: 1.7; }
+        nav { background-color: #2d6a4f; padding: 15px 0; position: fixed; width: 100%; top: 0; z-index: 1000; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); }
+        nav .nav-container { max-width: 1300px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; padding: 0 20px; }
+        nav h1 { font-family: 'Lora', serif; font-size: 1.8em; color: #fff; }
+        nav ul { list-style: none; display: flex; gap: 30px; }
+        nav a { color: #fff; text-decoration: none; font-weight: 600; transition: color 0.3s; }
+        nav a:hover { color: #95d5b2; }
+        header { background: linear-gradient(135deg, #40916c, #74c69d); padding: 100px 20px 60px; text-align: center; color: #fff; }
+        header h1 { font-family: 'Lora', serif; font-size: 3.5em; margin-bottom: 10px; }
+        header p { font-size: 1.3em; max-width: 800px; margin: 0 auto; }
+        .container { max-width: 1300px; margin: 60px auto; padding: 0 20px; }
+        .tool-grid, .puzzle-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); gap: 40px; }
+        .tool-card, .puzzle-card { background-color: #fff; border-radius: 12px; padding: 30px; box-shadow: 0 6px 20px rgba(0, 0, 0, 0.05); transition: transform 0.3s, box-shadow 0.3s; }
+        .tool-card:hover, .puzzle-card:hover { transform: translateY(-10px); box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1); }
+        h2 { font-family: 'Lora', serif; font-size: 2em; color: #2d6a4f; margin-bottom: 15px; }
+        p { font-size: 1.1em; color: #555; margin-bottom: 20px; }
+        .tool-input, .puzzle-input { display: flex; flex-wrap: wrap; gap: 15px; justify-content: center; margin: 20px 0; }
+        input[type="number"], input[type="text"], select { padding: 12px; font-size: 1em; border: 1px solid #ccc; border-radius: 6px; width: 130px; transition: border-color 0.3s; }
+        input:focus, select:focus { border-color: #40916c; outline: none; }
+        button { padding: 12px 25px; font-size: 1em; background-color: #40916c; color: #fff; border: none; border-radius: 6px; cursor: pointer; transition: background-color 0.3s; }
+        button:hover { background-color: #2d6a4f; }
+        .result { margin-top: 20px; font-weight: 600; color: #40916c; font-size: 1.2em; }
+        .hint { font-size: 0.9em; color: #777; margin-top: 10px; cursor: pointer; }
+        .hint:hover { color: #40916c; }
+        footer { background-color: #2d6a4f; padding: 30px; color: #fff; text-align: center; margin-top: 60px; }
+        footer p { color: #fff; font-size: 1.1em; }
+        @media (max-width: 768px) {
+            .tool-grid, .puzzle-grid { grid-template-columns: 1fr; }
+            nav ul { gap: 15px; }
+            header h1 { font-size: 2.5em; }
+            input[type="number"], input[type="text"], select { width: 100%; }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="nav-container">
+            <h1>MathHaven</h1>
+            <ul>
+                <li><a href="#home">Home</a></li>
+                <li><a href="#tools">Tools</a></li>
+                <li><a href="#puzzles">Puzzles</a></li>
+                <li><a href="#about">About</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <header id="home">
+        <h1>Welcome to MathHaven</h1>
+        <p>A suite of tools and puzzles for all ages.</p>
+    </header>
+
+    <div class="container" id="tools">
+        <h2>Mathematical Tools</h2>
+        <p>Simplify complex concepts with these tools.</p>
+        <div class="tool-grid">
+            <div class="tool-card">
+                <h2>Basic Calculator</h2>
+                <p>Add, subtract, multiply, divide.</p>
+                <div class="tool-input">
+                    <input type="number" id="num1" placeholder="First number">
+                    <select id="operation">
+                        <option value="add">+</option>
+                        <option value="subtract">-</option>
+                        <option value="multiply">×</option>
+                        <option value="divide">÷</option>
+                    </select>
+                    <input type="number" id="num2" placeholder="Second number">
+                    <button onclick="calculate()">Calculate</button>
+                </div>
+                <div class="result" id="calcResult">Result: </div>
+            </div>
+            <div class="tool-card">
+                <h2>Fraction Simplifier</h2>
+                <p>Reduce fractions.</p>
+                <div class="tool-input">
+                    <input type="number" id="numerator" placeholder="Numerator">
+                    <span>/</span>
+                    <input type="number" id="denominator" placeholder="Denominator">
+                    <button onclick="simplifyFraction()">Simplify</button>
+                </div>
+                <div class="result" id="fracResult">Result: </div>
+            </div>
+            <div class="tool-card">
+                <h2>Percentage Calculator</h2>
+                <p>Find percentages.</p>
+                <div class="tool-input">
+                    <input type="number" id="percentNum" placeholder="Number">
+                    <input type="number" id="percent" placeholder="Percentage (%)">
+                    <button onclick="calcPercent()">Calculate</button>
+                </div>
+                <div class="result" id="percentResult">Result: </div>
+            </div>
+            <div class="tool-card">
+                <h2>Rectangle Area Calculator</h2>
+                <p>Calculate rectangle area.</p>
+                <div class="tool-input">
+                    <input type="number" id="length" placeholder="Length">
+                    <input type="number" id="width" placeholder="Width">
+                    <button onclick="calcArea()">Calculate</button>
+                </div>
+                <div class="result" id="areaResult">Result: </div>
+            </div>
+            <div class="tool-card">
+                <h2>Multiplication Table Generator</h2>
+                <p>Generate times tables.</p>
+                <div class="tool-input">
+                    <input type="number" id="tableNum" placeholder="Number (1-12)">
+                    <button onclick="generateTable()">Generate</button>
+                </div>
+                <div class="result" id="tableResult">Result: </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container" id="puzzles">
+        <h2>Math Puzzles</h2>
+        <p>Test your wits with these math puzzles!</p>
+        <div class="puzzle-grid">
+            <div class="puzzle-card">
+                <h2>Puzzle 1: Next in Line</h2>
+                <p>What’s the next number: 2, 4, 6, 8, ___?</p>
+                <div class="puzzle-input">
+                    <input type="number" id="puzzle1Answer" placeholder="Your answer">
+                    <button onclick="checkPuzzle1()">Check</button>
+                </div>
+                <div class="result" id="puzzle1Result">Result: </div>
+                <div class="hint" onclick="alert('Hint: Look for a pattern in the differences.')">Show Hint</div>
+            </div>
+            <div class="puzzle-card">
+                <h2>Puzzle 2: Fruit Share</h2>
+                <p>You have 12 apples, keep 3, share the rest among 3 friends. How many per friend?</p>
+                <div class="puzzle-input">
+                    <input type="number" id="puzzle2Answer" placeholder="Your answer">
+                    <button onclick="checkPuzzle2()">Check</button>
+                </div>
+                <div class="result" id="puzzle2Result">Result: </div>
+                <div class="hint" onclick="alert('Hint: Subtract what you keep, then divide.')">Show Hint</div>
+            </div>
+            <div class="puzzle-card">
+                <h2>Puzzle 3: Magic Square</h2>
+                <p>In a 3x3 grid summing to 15, if one row is 4, 9, 2, what’s 8, 3, ___?</p>
+                <div class="puzzle-input">
+                    <input type="number" id="puzzle3Answer" placeholder="Your answer">
+                    <button onclick="checkPuzzle3()">Check</button>
+                </div>
+                <div class="result" id="puzzle3Result">Result: </div>
+                <div class="hint" onclick="alert('Hint: Each row sums to 15.')">Show Hint</div>
+            </div>
+            <div class="puzzle-card">
+                <h2>Puzzle 4: Age Mystery</h2>
+                <p>I’m 12, sister’s 8. I’m twice her age when I was 8. How old when she’s 12?</p>
+                <div class="puzzle-input">
+                    <input type="number" id="puzzle4Answer" placeholder="Your answer">
+                    <button onclick="checkPuzzle4()">Check</button>
+                </div>
+                <div class="result" id="puzzle4Result">Result: </div>
+                <div class="hint" onclick="alert('Hint: Age gap stays constant.')">Show Hint</div>
+            </div>
+            <div class="puzzle-card">
+                <h2>Puzzle 5: Square Areas</h2>
+                <p>A square’s area is 16. If side doubles, what’s the new area?</p>
+                <div class="puzzle-input">
+                    <input type="number" id="puzzle5Answer" placeholder="Your answer">
+                    <button onclick="checkPuzzle5()">Check</button>
+                </div>
+                <div class="result" id="puzzle5Result">Result: </div>
+                <div class="hint" onclick="alert('Hint: Area scales with side length squared.')">Show Hint</div>
+            </div>
+        </div>
+    </div>
+
+    <footer id="about">
+        <p>MathHaven - A platform for mathematical excellence.</p>
+    </footer>
+
+    <script>
+        // Tool Functions
+        function calculate() {
+            const num1 = parseFloat(document.getElementById("num1").value);
+            const num2 = parseFloat(document.getElementById("num2").value);
+            const operation = document.getElementById("operation").value;
+            let result;
+            if (isNaN(num1) || isNaN(num2)) result = "Enter valid numbers.";
+            else {
+                switch (operation) {
+                    case "add": result = num1 + num2; break;
+                    case "subtract": result = num1 - num2; break;
+                    case "multiply": result = num1 * num2; break;
+                    case "divide": result = num2 === 0 ? "Cannot divide by zero." : (num1 / num2).toFixed(4); break;
+                }
+            }
+            document.getElementById("calcResult").textContent = `Result: ${result}`;
+        }
+
+        function simplifyFraction() {
+            const num = parseInt(document.getElementById("numerator").value);
+            const den = parseInt(document.getElementById("denominator").value);
+            if (isNaN(num) || isNaN(den) || den === 0) {
+                document.getElementById("fracResult").textContent = "Result: Enter valid numbers (denominator ≠ 0).";
+                return;
+            }
+            const gcd = (a, b) => b === 0 ? a : gcd(b, a % b);
+            const divisor = gcd(Math.abs(num), Math.abs(den));
+            document.getElementById("fracResult").textContent = `Result: ${num / divisor}/${den / divisor}`;
+        }
+
+        function calcPercent() {
+            const num = parseFloat(document.getElementById("percentNum").value);
+            const percent = parseFloat(document.getElementById("percent").value);
+            if (isNaN(num) || isNaN(percent)) {
+                document.getElementById("percentResult").textContent = "Result: Enter valid numbers.";
+                return;
+            }
+            document.getElementById("percentResult").textContent = `Result: ${(num * percent / 100).toFixed(2)}`;
+        }
+
+        function calcArea() {
+            const length = parseFloat(document.getElementById("length").value);
+            const width = parseFloat(document.getElementById("width").value);
+            if (isNaN(length) || isNaN(width) || length <= 0 || width <= 0) {
+                document.getElementById("areaResult").textContent = "Result: Enter positive numbers.";
+                return;
+            }
+            document.getElementById("areaResult").textContent = `Result: ${(length * width).toFixed(2)} square units`;
+        }
+
+        function generateTable() {
+            const num = parseInt(document.getElementById("tableNum").value);
+            if (isNaN(num) || num < 1 || num > 12) {
+                document.getElementById("tableResult").textContent = "Result: Enter a number between 1 and 12.";
+                return;
+            }
+            let table = "";
+            for (let i = 1; i <= 12; i++) table += `${num} × ${i} = ${num * i}<br>`;
+            document.getElementById("tableResult").innerHTML = `Result:<br>${table}`;
+        }
+
+        // Puzzle Functions
+        function checkPuzzle1() {
+            const answer = parseInt(document.getElementById("puzzle1Answer").value);
+            if (isNaN(answer)) {
+                document.getElementById("puzzle1Result").textContent = "Result: Enter a number.";
+            } else {
+                document.getElementById("puzzle1Result").textContent = answer === 10 ? "Result: Correct! (Pattern: +2)" : "Result: Try again.";
+            }
+        }
+
+        function checkPuzzle2() {
+            const answer = parseInt(document.getElementById("puzzle2Answer").value);
+            if (isNaN(answer)) {
+                document.getElementById("puzzle2Result").textContent = "Result: Enter a number.";
+            } else {
+                document.getElementById("puzzle2Result").textContent = answer === 3 ? "Result: Correct! (12 - 3 = 9, 9 ÷ 3 = 3)" : "Result: Try again.";
+            }
+        }
+
+        function checkPuzzle3() {
+            const answer = parseInt(document.getElementById("puzzle3Answer").value);
+            if (isNaN(answer)) {
+                document.getElementById("puzzle3Result").textContent = "Result: Enter a number.";
+            } else {
+                document.getElementById("puzzle3Result").textContent = answer === 4 ? "Result: Correct! (8 + 3 + 4 = 15)" : "Result: Try again.";
+            }
+        }
+
+        function checkPuzzle4() {
+            const answer = parseInt(document.getElementById("puzzle4Answer").value);
+            if (isNaN(answer)) {
+                document.getElementById("puzzle4Result").textContent = "Result: Enter a number.";
+            } else {
+                document.getElementById("puzzle4Result").textContent = answer === 16 ? "Result: Correct! (Age gap: 4, 12 + 4 = 16)" : "Result: Try again.";
+            }
+        }
+
+        function checkPuzzle5() {
+            const answer = parseInt(document.getElementById("puzzle5Answer").value);
+            if (isNaN(answer)) {
+                document.getElementById("puzzle5Result").textContent = "Result: Enter a number.";
+            } else {
+                document.getElementById("puzzle5Result").textContent = answer === 64 ? "Result: Correct! (Side 4 → 8, 8² = 64)" : "Result: Try again.";
+            }
+        }
+    </script>
+</body>
+</html>
